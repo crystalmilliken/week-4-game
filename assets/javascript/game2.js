@@ -32,7 +32,6 @@ let starWarsGame = {
                 let charactersToChoose = document.getElementsByClassName("charactersToChooseFrom");
                     for(let i = 0; i<charactersToChoose.length; i++){
                         charactersToChoose[i].addEventListener("click", function(){check(this)});
-                        
                     }
                 $("#attack").on("click", function(){attackBadGuy()});
         let counterAttackGoodGuy = function(){
@@ -52,7 +51,6 @@ let starWarsGame = {
                 if(images.length === numberOfAttacks +1){
                     document.getElementById("attacker").innerHTML = `<div style="text-align:center;margin-left:2em;float:left;margin-top:2em;"><img src="assets/images/won.jpg" style="height:150px;border:thin solid green"></div>`;
                     document.getElementById("vs").innerHTML = "";
-                
                     document.getElementById("attacker").innerHTML = ``;
                     document.getElementById("information").innerHTML = `Sky's the limit for you, you won!<br><button onclick="location.reload()">Start Over</button>`;
                 }
@@ -104,10 +102,8 @@ let starWarsGame = {
             }else{
                 alert("start a new game");
             }
-           
-            
+        }
     }
-            }
 }
 
 starWarsGame.start();
