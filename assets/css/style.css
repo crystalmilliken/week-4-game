@@ -1,0 +1,53 @@
+.container{
+    width:100%;
+}
+.main{
+    background: url("../images/stars.png");
+    width:100%;
+    padding-bottom:3em;
+    float:left;
+}
+#list{
+    display: inline-block;
+}
+.characterDivs{
+    height:200px;
+    padding:.25em;
+    padding-top:1em;
+    background-color: white;
+    float:left;
+    margin:.5em;
+    position: relative;
+}
+.change{
+    border: thin solid black;
+}
+.change::before{
+    content: attr(dataA);
+    position:absolute;
+    top: 0px;
+    left:2em;
+}
+.change::after{
+    content: attr(dataB);
+    position:absolute;
+    bottom: 0px;
+    right:2em;
+}
+#information{
+    color:red;
+    font-size: 20px;
+    margin-left:2em;
+    float:left;
+    background-color: white;
+    margin-right:2em;
+    width:200px;
+    padding:1em;
+}
+#vs{
+    background-color: white;
+    font-size: 40px;
+    float:left;
+    margin-top:2em;
+    visibility: hidden;
+}
