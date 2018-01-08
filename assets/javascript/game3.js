@@ -33,6 +33,7 @@ const images = [{
 let starWarsGame = {
     fighter: "",
     defender: "",
+    heartCount: 0,
     attack: 0,
     currentHealthPoints: 0,
     currentAttackPower: 0,
@@ -42,13 +43,13 @@ let starWarsGame = {
     defenderCounterAttack: 0,
     numberOfAttacks: 0,
     attackNumberIncrease: 0,
-    
+    calculatePercentage:0,
     start: function () {
         document.getElementById("information").innerHTML = "Pick 2 characters, first one is you, second is your opponent. Then ATTACK!";
         for (let i = 0; i < images.length; i++) {
             let character = images[i].name;
             let path = `<img src="assets/images/${character}" name = ${character} class="charactersToChooseFrom" style="height:150px">`;
-            let newDiv = `<div class="characterDivs" id="${character}">${path}</div>`
+            let newDiv = `<div class="characterDivs" id="${character}">${path}</div>`;
             $("#list").append(newDiv);
             let name = document.getElementById(`${images[i].name}`);
             name.classList.add("change");
@@ -64,6 +65,32 @@ let starWarsGame = {
     },
 
     counterAttackGoodGuy: function () {
+        this.calculatePercentage = this.currentHealthPoints / this.heartCount;
+         if (this.calculatePercentage > 0) {
+             $("#hearts").html("");
+            this.calculatePercentage = Math.floor(this.calculatePercentage);
+            if(this.calculatePercentage === 1){
+                let multiplier = 1;
+                for(let i =0;i < multiplier;i++){
+                    $("#hearts").append("<img src='assets/images/brokenlife.png' alt='life' style='height:50px'>");
+                }
+            }if(this.calculatePercentage === 2){
+                let multiplier = 2;
+                for(let i =0;i < multiplier;i++){
+                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
+                }
+            }if(this.calculatePercentage === 3){
+                let multiplier = 3;
+                for(let i =0;i < multiplier;i++){
+                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
+                }
+            }if(this.calculatePercentage === 4){
+                let multiplier = 4;
+                for(let i =0;i < multiplier;i++){
+                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
+                }
+            }
+           }
         let displayName = this.defender.replace(".png", "");
         displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
         this.currentHealthPoints = this.currentHealthPoints - this.defenderCounterAttack;
@@ -78,6 +105,7 @@ let starWarsGame = {
                 document.getElementById("information").innerHTML = `Bummer, don't quit your dy job!<br><button onclick="location.reload()">Start Over</button>`;
             
         } else if (this.defenderHealthPoints <= 0) {
+
             this.numberOfAttacks++;
             document.getElementById("defender").innerHTML = ``;
             document.getElementById("information").innerHTML = `Pick another character, try and attack again!`;
@@ -108,7 +136,6 @@ let starWarsGame = {
     },
 
     check: function (e) {
-        console.log(this)
         let chosen = e.currentTarget.name;
         if (this.fighter === "") {
             let attackerDiv = document.getElementById("attacker");
@@ -122,6 +149,16 @@ let starWarsGame = {
                     this.fighter = compare.name;
                     document.getElementById(`${chosen}`).style.display = "none";
                     attackerDiv.innerHTML = `<div style="text-align:center;background-color:white;float:left; width:200px;margin-left:2em;float:left;margin-top:2em;clear:after;"><h2>Attacker</h2><img src="assets/images/${chosen}" style="height:150px;border:thin solid green;padding:.5em"><p style="padding-right:2em; ">This is you! --> ${this.currentHealthPoints}</p></div>`;
+                    this.heartCount = (images[i].healthPoints)/4;
+                    this.calculatePercentage = this.currentHealthPoints / this.heartCount;
+                    if (this.calculatePercentage > 0) {
+                        this.calculatePercentage = Math.floor(this.calculatePercentage);
+                        if(this.calculatePercentage === 1 || this.calculatePercentage === 2 || this.calculatePercentage === 3 || this.calculatePercentage === 4){
+                            for(let i =0;i<this.calculatePercentage;i++){
+                                $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
+                            }
+                        }
+                    }
                 }
             }
         } else if (this.defender === "") {
