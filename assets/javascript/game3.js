@@ -45,7 +45,7 @@ let starWarsGame = {
     attackNumberIncrease: 0,
     calculatePercentage:0,
     start: function () {
-        document.getElementById("information").innerHTML = "Pick 2 characters, first one is you, second is your opponent. Then ATTACK!";
+        $("#information").html("Pick 2 characters, first one is you, second is your opponent. Then ATTACK!");
         for (let i = 0; i < images.length; i++) {
             let character = images[i].name;
             let path = `<img src="assets/images/${character}" name = ${character} class="charactersToChooseFrom" style="height:150px">`;
@@ -54,10 +54,12 @@ let starWarsGame = {
             let name = document.getElementById(`${images[i].name}`);
             name.classList.add("change");
             let displayName = images[i].name.replace(".png", "");
+            //Jquery doesn't have an option to change pseudo-Elements
             document.getElementById(`${images[i].name}`).setAttribute("dataA", displayName);
             document.getElementById(`${images[i].name}`).setAttribute("dataB", images[i].healthPoints)
         }
-        let charactersToChoose = document.getElementsByClassName("charactersToChooseFrom");
+        
+        let charactersToChoose = $(".charactersToChooseFrom");
         for (let i = 0; i < charactersToChoose.length; i++) {
             charactersToChoose[i].addEventListener("click", this.check.bind(this));
         }
@@ -65,56 +67,51 @@ let starWarsGame = {
     },
 
     counterAttackGoodGuy: function () {
-        this.calculatePercentage = this.currentHealthPoints / this.heartCount;
-         if (this.calculatePercentage > 0) {
-             $("#hearts").html("");
-            this.calculatePercentage = Math.floor(this.calculatePercentage);
-            if(this.calculatePercentage === 1){
-                let multiplier = 1;
-                for(let i =0;i < multiplier;i++){
-                    $("#hearts").append("<img src='assets/images/brokenlife.png' alt='life' style='height:50px'>");
-                }
-            }if(this.calculatePercentage === 2){
-                let multiplier = 2;
-                for(let i =0;i < multiplier;i++){
-                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
-                }
-            }if(this.calculatePercentage === 3){
-                let multiplier = 3;
-                for(let i =0;i < multiplier;i++){
-                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
-                }
-            }if(this.calculatePercentage === 4){
-                let multiplier = 4;
-                for(let i =0;i < multiplier;i++){
-                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
-                }
-            }
-           }
+        
         let displayName = this.defender.replace(".png", "");
         displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
         this.currentHealthPoints = this.currentHealthPoints - this.defenderCounterAttack;
-        document.getElementById("attacker").innerHTML = `<div style="text-align:center;background-color:white; width:200px;margin-left:2em;float:left;margin-top:2em;"><h2>Attacker</h2><img src="assets/images/${this.fighter}" style="height:150px;border:thin solid green"><p style="padding-right:2em; ">This is you! --> ${this.currentHealthPoints}</p></div>`;
-        document.getElementById("information").innerHTML = `You attacked with ${this.currentAttackPower},<br>${displayName} attacked you with ${this.defenderCounterAttack}`;
+        this.calculatePercentage = this.currentHealthPoints / this.heartCount;
+        let multiplier = (a)=>{
+            for(let i =0;i < a;i++){
+                    $("#hearts").append("<img src='assets/images/life.png' alt='life' style='height:50px'>");
+                }
+        }
+         if (this.calculatePercentage > 0) {
+             $("#hearts").html("");
+            //this.calculatePercentage = Math.floor(this.calculatePercentage);
+            if(this.calculatePercentage > 0 && this.calculatePercentage <= 1){
+                multiplier(1);
+            }else if(this.calculatePercentage >= 1 && this.calculatePercentage <= 2){
+               multiplier(2);
+            }else if(this.calculatePercentage >= 2 && this.calculatePercentage <= 3){
+                multiplier(3);
+            }else if(this.calculatePercentage >= 3 && this.calculatePercentage <= 4){
+              multiplier(4);
+            }
+           }
+        $("#attacker").html(`<div style="text-align:center;background-color:white; width:200px;margin-left:2em;float:left;margin-top:2em;"><h2>Attacker</h2><img src="assets/images/${this.fighter}" style="height:150px;border:thin solid green"><p style="padding-right:2em; ">This is you! --> ${this.currentHealthPoints}</p></div>`);
+        $("#information").html(`You attacked with ${this.currentAttackPower},<br>${displayName} attacked you with ${this.defenderCounterAttack}`);
         //Determine points
         if (this.currentHealthPoints <= 0) {
-               document.getElementById("attacker").innerHTML = `<div style="text-align:center;margin-left:2em;float:left;margin-top:2em;"><img src="assets/images/won.jpg" style="height:150px;border:thin solid green"></div>`;
-                document.getElementById("vs").innerHTML = "";
-                document.getElementById("attacker").innerHTML = ``;
-                document.getElementById("defender").innerHTML = ``;
-                document.getElementById("information").innerHTML = `Bummer, don't quit your dy job!<br><button onclick="location.reload()">Start Over</button>`;
+            $("#hearts").html("<img src='assets/images/brokenlife.png' alt='life' style='height:50px'>");
+               $("#attacker").html(`<div style="text-align:center;margin-left:2em;float:left;margin-top:2em;"><img src="assets/images/won.jpg" style="height:150px;border:thin solid green"></div>`);
+                $("#vs").html("");
+                $("#attacker").html(``);
+                $("#defender").html(``);
+                $("#information").html(`Bummer, don't quit your dy job!<br><button onclick="location.reload()">Start Over</button>`);
             
         } else if (this.defenderHealthPoints <= 0) {
 
             this.numberOfAttacks++;
-            document.getElementById("defender").innerHTML = ``;
-            document.getElementById("information").innerHTML = `Pick another character, try and attack again!`;
+            $("#defender").html(``);
+            $("#information").html(`Pick another character, try and attack again!`);
             this.defender = "";
             if (images.length === this.numberOfAttacks + 1) {
-                document.getElementById("attacker").innerHTML = `<div style="text-align:center;margin-left:2em;float:left;margin-top:2em;"><img src="assets/images/won.jpg" style="height:150px;border:thin solid green"></div>`;
-                document.getElementById("vs").innerHTML = "";
-                document.getElementById("attacker").innerHTML = ``;
-                document.getElementById("information").innerHTML = `Sky's the limit for you, you won!<br><button onclick="location.reload()">Start Over</button>`;
+                $("#attacker").html(`<div style="text-align:center;margin-left:2em;float:left;margin-top:2em;"><img src="assets/images/won.jpg" style="height:150px;border:thin solid green"></div>`);
+                $("#vs").html("");
+                $("#attacker").html(``);
+                $("#information").html(`Sky's the limit for you, you won!<br><button onclick="location.reload()">Start Over</button>`);
             }
         }
     },
@@ -129,7 +126,7 @@ let starWarsGame = {
         }
         //look at mutation
         this.attack++;
-        document.getElementById("defender").innerHTML = `<div style="text-align:center;background-color:white; width:200px;float:left;margin-top:2em;"><h2>Defender</h2><img src="assets/images/${this.defender}" style="height:150px;border:thin solid red;"><p style="padding-right:2em;">The guy to beat! --> ${this.defenderHealthPoints}</p></div>`;
+        $("#defender").html(`<div style="text-align:center;background-color:white; width:200px;float:left;margin-top:2em;"><h2>Defender</h2><img src="assets/images/${this.defender}" style="height:150px;border:thin solid red;"><p style="padding-right:2em;">The guy to beat! --> ${this.defenderHealthPoints}</p></div>`);
         this.counterAttackGoodGuy();
         }
         
